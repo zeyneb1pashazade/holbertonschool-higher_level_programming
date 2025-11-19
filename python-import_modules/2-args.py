@@ -7,7 +7,7 @@ if __name__ == "__main__":
         print("0 arguments.")
     elif b == 1:
         print("1 argument:")
-    else :
+    else:
         print(f"{b} arguments:")
     for i in range(1, b + 1):
         print(f"{i}: {a[i]}")
