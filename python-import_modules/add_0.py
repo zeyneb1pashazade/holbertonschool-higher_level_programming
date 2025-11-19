@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #python task 1
 def add(a, b):
     """My addition function
