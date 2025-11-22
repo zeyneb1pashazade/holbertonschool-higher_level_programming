@@ -4,4 +4,4 @@ def add_tuple(tuple_a=(), tuple_b=()):
     b = tuple_b + (0, 0)
     sum1 = a[0] + b[0]
     sum2 = a[1] + b[1]
-    return(sum1, sum2)
+    return (sum1, sum2)
