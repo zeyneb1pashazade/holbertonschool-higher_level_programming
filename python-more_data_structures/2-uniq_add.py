@@ -1,7 +1,10 @@
 #!/usr/bin/python3
 def uniq_add(my_list=[]):
-    new_list = my_list[:]
+    unique = []
     for i in my_list:
-        if my_list.count(i) > 1:
-            new_list.remove(i)
-    return new_list
+        if i not in unique:
+            unique.append(i)
+    total = 0
+    for i in unique:
+        total += i
+    return total
