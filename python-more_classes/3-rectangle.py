@@ -98,26 +98,8 @@ class Rectangle:
 
         # Create a single row of '#' characters with the correct width
         row = "#" * self.__width
-        
+
         # Join multiple rows (equal to the height) with newline characters
         return "\n".join([row for _ in range(self.__height)])
-
-    def __repr__(self):
-        """
-        Returns the official string representation of the Rectangle object.
-        This returns a string that allows the object to be recreated,
-        but for simplicity in this case, we rely on the default object
-        representation shown in the example.
-        """
-        # Since the example output shows the default representation, we don't
-        # need to define a custom __repr__ here, or we can explicitly return 
-        # a standard representation if needed for strict testing.
-        # However, as the requested output matches the default memory address, 
-        # we can skip this method, or implement a basic one:
-        return f"<3-rectangle.Rectangle object at {hex(id(self))}>"
-        # I will comment out the explicit __repr__ to let it default, which is simpler
-        # but if required by testing, the above line is a safe placeholder.
-        # Since the problem says 'print(repr(my_rectangle))', and doesn't specify
-        # the format, the default behavior is usually accepted.
-        # For maximum compatibility with the example's spirit, I'll rely on the default.
-        pass
+# __repr__ method is not defined to allow Python's default behavior,
+# which returns the memory address as shown in the test example.
