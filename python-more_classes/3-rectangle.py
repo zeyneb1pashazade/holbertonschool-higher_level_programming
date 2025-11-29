@@ -101,5 +101,4 @@ class Rectangle:
 
         # Join multiple rows (equal to the height) with newline characters
         return "\n".join([row for _ in range(self.__height)])
-# __repr__ method is not defined to allow Python's default behavior,
-# which returns the memory address as shown in the test example.
+# __repr__ is omitted to use Python's default object representation.
