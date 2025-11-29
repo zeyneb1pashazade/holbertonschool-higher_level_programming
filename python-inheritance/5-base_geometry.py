@@ -1,0 +1,11 @@
+#!/usr/bin/python3
+"""
+5-base_geometry.py: Defines an empty class BaseGeometry.
+"""
+
+
+class BaseGeometry:
+    """
+    An empty class serving as the base for geometric objects.
+    """
+    pass
