@@ -1,28 +1,26 @@
 #!/usr/bin/python3
 """
-5-save_to_json_file.py
+6-load_from_json_file.py
 
-A function that writes an Object to a text file, using a JSON representation.
+A function that creates an Object from a "JSON file".
 """
 import json
 
 
-def save_to_json_file(my_obj, filename):
+def load_from_json_file(filename):
     """
-    Writes a Python object to a text file using its JSON string representation.
+    Creates a Python object from a JSON formatted file.
+
+    It reads the JSON string from the file and deserializes it into
+    the corresponding Python data structure (e.g., list, dict).
 
     Args:
-        my_obj: The Python object (data structure) to serialize and save.
-        filename (str): The name of the file to write the JSON string to.
-    """
-    # First, serialize the Python object into a JSON formatted string.
-    json_string = json.dumps(my_obj)
+        filename (str): The name of the JSON file to read.
 
-    # Use the 'with' statement to open the file in 'w' (write/overwrite) mode.
-    # We don't need to specify encoding here as 'w' for text files defaults
-    # to the system default, which usually handles the simple ASCII characters
-    # of the JSON string correctly, but for maximum compatibility with text
-    # files (as per previous exercises), let's explicitly use UTF-8.
-    with open(filename, mode='w', encoding='utf-8') as f:
-        # Write the JSON string to the file.
-        f.write(json_string)
+    Returns:
+        object: The Python data structure represented by the file's content.
+    """
+    # Use the 'with' statement to open the file in 'r' (read) mode.
+    with open(filename, mode='r', encoding='utf-8') as f:
+        # Read the content (JSON string) and deserialize it using json.load().
+        return json.load(f)
