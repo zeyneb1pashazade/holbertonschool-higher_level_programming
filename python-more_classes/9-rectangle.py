@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """
-9-rectangle.py: Defines Rectangle class, tracks instance count, customizable
-print symbol, static method for comparison, and a class method to create a square.
+9-rectangle.py: Defines Rectangle class, tracks count, custom print symbol,
+static/class methods.
 """
 
 
