@@ -1,88 +1,92 @@
-#!/usr/bin/python3
 from flask import Flask, render_template, request
 import json
 import csv
 import sqlite3
-import os
 
 app = Flask(__name__)
 
 
-# ---------- JSON Reader ----------
-def read_json(file_path):
+def read_json():
+    """reads from JSON file"""
     try:
-        with open(file_path, 'r') as f:
-            data = json.load(f)
-        return data
-    except Exception:
+        with open('products.json', 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
         return []
 
 
-# ---------- CSV Reader ----------
-def read_csv(file_path):
+def read_csv():
+    """reads from CSV file"""
+    products = []
     try:
-        products = []
-        with open(file_path, newline='') as f:
+        with open('products.csv', 'r') as f:
             reader = csv.DictReader(f)
             for row in reader:
                 row['id'] = int(row['id'])
-                row['price'] = float(row['price'])
                 products.append(row)
-        return products
-    except Exception:
+    except FileNotFoundError:
         return []
+    return products
 
 
-# ---------- SQLite Reader ----------
-def read_sqlite(db_path):
+def read_sql():
+    """reads from SQLite Database"""
     products = []
     try:
-        conn = sqlite3.connect(db_path)
+        # connect to the database
+        conn = sqlite3.connect('products.db')
+
+        # this allows us to access columns by name (row['name']) instead of index (row[1])
+        conn.row_factory = sqlite3.Row
+
         cursor = conn.cursor()
-        cursor.execute("SELECT id, name, category, price FROM Products")
+        cursor.execute("SELECT * FROM Products")
         rows = cursor.fetchall()
-        for r in rows:
-            products.append({
-                'id': r[0],
-                'name': r[1],
-                'category': r[2],
-                'price': r[3]
-            })
+
+        # convert database rows to a list of dictionaries
+        for row in rows:
+            products.append(dict(row))
+
         conn.close()
-    except Exception:
-        products = []
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        return []
+
     return products
 
 
 @app.route('/products')
 def products():
+    # get Query Parameters
     source = request.args.get('source')
-    product_id = request.args.get('id', type=int)
-    error = None
+    p_id = request.args.get('id')
+
     products_list = []
 
-    # Determine source
-    if source == "json":
-        products_list = read_json("products.json")
-    elif source == "csv":
-        products_list = read_csv("products.csv")
-    elif source == "sql":
-        products_list = read_sqlite("products.db")
+    # input Validation (Allowlist)
+    if source == 'json':
+        products_list = read_json()
+    elif source == 'csv':
+        products_list = read_csv()
+    elif source == 'sql':  # <--- NEW: Handle SQL source
+        products_list = read_sql()
     else:
-        error = "Wrong source"
-        return render_template("product_display.html", error=error, products=[])
+        return render_template('product_display.html', error_msg="Wrong source")
 
-    # Filter by id if provided
-    if product_id is not None:
-        filtered = [p for p in products_list if p.get("id") == product_id]
-        if not filtered:
-            error = "Product not found"
-            products_list = []
-        else:
-            products_list = filtered
+    # ID Filtering Logic
+    if p_id:
+        # We perform filtering in Python here for simplicity,
+        # ensuring consistent behavior across JSON, CSV, and SQL.
+        filtered_products = [p for p in products_list if str(p['id']) == str(p_id)]
 
-    return render_template("product_display.html", products=products_list, error=error)
+        if not filtered_products:
+            return render_template('product_display.html', error_msg="Product not found")
+
+        products_list = filtered_products
+
+    # render Template
+    return render_template('product_display.html', products=products_list)
 
 
-if __name__ == "__main__":
-    app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)
